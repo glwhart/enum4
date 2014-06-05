@@ -1,0 +1,4 @@
+#!/usr/bin/python
+import sys
+
+loc = [4,19,-1]

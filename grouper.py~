@@ -1,0 +1,11 @@
+#!/usr/bin/python
+# Generate the entire group from the generators
+generators = [[2,3,4,5,6,7,0,1],[2,3,0,1,4,5,6,7]]
+growing = True
+origgroup = generators
+newgroup = group
+while growing:
+    for i in origgroup:
+        for j in origgroup:
+            element = [origgroup[i][ilc] for ilc in origgroup[j]]
+            print element
