@@ -22,24 +22,6 @@ G = [[] for ilc in range(t.k)]
 #generators = [[2,3,4,5,1,7,8,9,10,6],[2,1,3,4,5,7,6,8,9,10]]
 #generators = [[j -1 for j in i] for i in [[2,3,4,1,5,6,7,8],[2,1,3,4,5,6,7,8],[1,2,3,4,6,7,8,5],[1,2,3,4,6,5,7,8]]]
 generators = [[j -1 for j in i] for i in [[2,1,4,3,5,6,7,8,9,10,11,12],[4,3,2,1,5,6,7,8,9,10,11,12],[1,2,3,4,6,7,8,5,9,10,11,12],[1,2,3,4,6,5,7,8,9,10,11,12],[1,2,3,4,5,6,7,8,10,11,9,12],[1,2,3,4,5,6,7,8,9,11,12,10]]]
-#generators = [[j -1 for j in i] for i in [[2,3,4,5,1,7,8,9,10,6],[2,1,3,4,5,7,6,8,9,10]]]
-# Generate the group from the generators
-###[G[0].append(i) for i in generators]
-####[G[0].append(i) for i in [[2,3,4,5,6,7,0,1],[2,3,0,1,4,5,6,7]]]
-####[G[0].append(i) for i in [[1,2,3,4,0,6,7,8,9 ,5],[1,0,2,3,4,6,5,7,8,9 ]]] 
-####G[0].append([(i+1)%t.n for i in range(t.n)])
-###growing = True
-###while growing:
-###    growing = False
-###    nG = len(G[0])
-###    # Loop over each possible pair of group elements to see if they create a new element
-###    for iG in G[0][:nG]:
-###        for jG in G[0][:nG]:
-###            g = [iG[i] for i in jG]
-###            if not g in G[0]:
-###                G[0].append(g)
-###                growing = True
-###g = len(G[0])
 G[0] = grouper(generators)
 print("Size of group:",len(G[0]))
 
