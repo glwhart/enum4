@@ -1,5 +1,53 @@
 #from scipy.special import binom as choose
 
+def partition_cycles_into_color_vector(colors,cycles):
+    import pdb
+    nCo = len(colors) # Number of colors
+    nCy = len(cycles) # Number of cycles
+    count = 0  # Number of legal partitions found
+    cyIdx = 0  # Index for the current cycle under consideration
+    F = [-1]*nCy # Indicates which cycles have been stored in which color slot 
+    S = [0]*nCo # Indicates the open slots in the color vector (that can still take cycles)
+    m = cycles  
+#    pdb.set_trace()
+        
+    while cyIdx >=0:
+#        print("cyIdx",cyIdx)
+#        print("s,m",S,m)
+#        print("F",F)
+
+        # Check whether current cycle can fit into current partitioning
+        if F[cyIdx]>-1: 
+            S[F[cyIdx]] -= cycles[cyIdx]
+        coIdx = F[cyIdx] + 1
+        found = True
+        if coIdx < nCo:
+            # Advance the colorIdx if there are still colors to but we can't fit another cycle in
+            # this color slot (second condition)
+            while coIdx < nCo-1 and S[coIdx] + m[cyIdx] > colors[coIdx]:
+                coIdx += 1
+            # If we can fit another cycle in the current color slot
+ #           print("coIdx,cyIdx",coIdx,cyIdx)
+            if S[coIdx] + m[cyIdx] <= colors[coIdx]: 
+                F[cyIdx] = coIdx
+                S[coIdx] += m[cyIdx]
+                if cyIdx == nCy-1:
+                    count += 1
+            else:
+                found = False
+        else:
+            found = False
+        
+        if cyIdx == nCy-1 or found is not True:
+            if found: # then remove current cycle from color slot
+                S[coIdx] -= m[cyIdx]
+            F[cyIdx] = -1
+            cyIdx -= 1
+        else:
+            cyIdx += 1
+    return count
+
+
 def grouper(generators):
     """ Generate a group from its generators """
     # Modified from its first form to be a little faster (but isn't as succinct anymore)
