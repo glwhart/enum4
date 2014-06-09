@@ -1,10 +1,35 @@
 #from scipy.special import binom as choose
+import sys
 
-def cycle_counter(permutation):
+def cycle_counter(perm):
+    """ Counts the number of disjoint cycles in a permutation """
+    if not any(i==0 for i in perm):
+        sys.exit("cycle_counter assumes that permutations use zero indexing")
+    n = len(perm)
+    mask = [0]*n
+    cycList = []
+    while any(i==0 for i in mask):
+        #print("mask",mask)
+        pos = mask.index(0)
+        c = 0
+        while True:
+            c += 1
+            #print("c,pos",c,pos)
+            mask[pos] = 1
+            pos = perm[pos]
+            #print("perm[pos]",pos)
+            if mask[pos] != 0: break
+        cycList.append(c)
+    cycList.sort()
+    return cycList
+        
     
 
 def partition_cycles_into_color_vector(colors,cycles):
-    import pdb
+    """ Counts the number of ways that a list of  cycles can be partitioned
+    match the number colors. That is, the number of ways the cycle
+    vector can be "fit into" the color vector.  """
+
     nCo = len(colors) # Number of colors
     nCy = len(cycles) # Number of cycles
     count = 0  # Number of legal partitions found
