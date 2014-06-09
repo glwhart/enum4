@@ -1,0 +1,5 @@
+In this directory, I'm testing algorithms for a surjective
+resolution-based approach to fixed-concentration enumeration.
+
+Preliminary tests indicate it will be much faster (better
+scaling) than the enum3 algorithm published in CMS

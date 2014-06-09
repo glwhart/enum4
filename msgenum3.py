@@ -1,5 +1,8 @@
 #from scipy.special import binom as choose
 
+def cycle_counter(permutation):
+    
+
 def partition_cycles_into_color_vector(colors,cycles):
     import pdb
     nCo = len(colors) # Number of colors
@@ -9,13 +12,7 @@ def partition_cycles_into_color_vector(colors,cycles):
     F = [-1]*nCy # Indicates which cycles have been stored in which color slot 
     S = [0]*nCo # Indicates the open slots in the color vector (that can still take cycles)
     m = cycles  
-#    pdb.set_trace()
-        
     while cyIdx >=0:
-#        print("cyIdx",cyIdx)
-#        print("s,m",S,m)
-#        print("F",F)
-
         # Check whether current cycle can fit into current partitioning
         if F[cyIdx]>-1: 
             S[F[cyIdx]] -= cycles[cyIdx]
@@ -27,7 +24,6 @@ def partition_cycles_into_color_vector(colors,cycles):
             while coIdx < nCo-1 and S[coIdx] + m[cyIdx] > colors[coIdx]:
                 coIdx += 1
             # If we can fit another cycle in the current color slot
- #           print("coIdx,cyIdx",coIdx,cyIdx)
             if S[coIdx] + m[cyIdx] <= colors[coIdx]: 
                 F[cyIdx] = coIdx
                 S[coIdx] += m[cyIdx]
@@ -37,7 +33,6 @@ def partition_cycles_into_color_vector(colors,cycles):
                 found = False
         else:
             found = False
-        
         if cyIdx == nCy-1 or found is not True:
             if found: # then remove current cycle from color slot
                 S[coIdx] -= m[cyIdx]
