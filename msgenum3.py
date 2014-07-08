@@ -1,6 +1,29 @@
 #from scipy.special import binom as choose
 import sys
 
+def polya_count(G,colors):
+    """ Given a group, and a "color vector" (list of number of colors
+    of each label), use Polya's enumeration theorem to find how many 
+    symmetrically-distinct configurations exist """
+    cycles = {}
+    for g in G:
+        c = str(cycle_counter(g))
+        if c in cycles:
+            cycles[c] += 1
+        else:
+            cycles[c] = 1
+    total = 0
+    for i in cycles:
+        v = eval(i)
+        fitTimes = partition_cycles_into_color_vector(colors,v)
+        total += fitTimes*cycles[i]
+    nG = len(G)
+    if total/nG != int(total/nG):
+        print("total:",total," Group size:",nG)
+        sys.exit("ERROR: function 'polya_count' gave a non-integer value")
+    return int(total/len(G))
+
+
 def cycle_counter(perm):
     """ Counts the number of disjoint cycles in a permutation """
     if not any(i==0 for i in perm):
@@ -75,11 +98,14 @@ def grouper(generators):
     # group elements arise. If they do, these are appended to the list. The checks are continued
     # until no new elements are generated. mG is introduced to avoid checking combinations that have
     # already been tried
+    if not all(len(i)==len(generators[0]) for i in generators):
+        sys.exit("ERROR: the generators passed to 'grouper' are not all same length")
     growing = True
     mG = 0 # Index marking which part of the table can be skipped
     while growing:
         growing = False
         nG = len(generators)
+        print("nG",nG)
         # Loop over each possible pair of group elements to see if they create a new element
         for iDx,iG in enumerate(generators[:nG]):
             for jDx,jG in enumerate(generators[:nG]):
@@ -92,20 +118,24 @@ def grouper(generators):
     return generators
 
 def choose(n, k):
-    """
-    A fast way to calculate binomial coefficients by Andrew Dalke (contrib).
-    (This probably isn't good for large values of n and k, but OK for our purposes --GH)
-    """
-    if 0 <= k <= n:
-        ntok = 1
-        ktok = 1
-        for t in range(1, min(k, n - k) + 1):
-            ntok *= n
-            ktok *= t
-            n -= 1
-        return ntok // ktok
-    else:
+    """ Binomial coefficient. Computes the number of permutations of n things, taken k at a
+    time. This implementation was taken from "Binomial Coefﬁcient Computation: Recursion or
+    Iteration?" by  Yannis Manolopoulos, ACM SIGCSE Bulletin InRoads, Vol.34, No.4, December
+    2002. http://delab.csd.auth.gr/papers/SBI02m.pdf 
+    It is supposed to be robust against large, intermediate values and to have optimal
+    complexity."""
+    if k < 0 or k > n: 
         return 0
+    if k==0 and n == 0:
+        return 1
+    t = 1
+    if k < n-k:
+        for i in range(n, n-k, -1):
+            t = t*i/(n-i+1)
+    else:
+        for i in range(n,k,-1):
+            t = t*i/(n-i+1)
+    return t
         
 def integer2coloring(y, m, a):
     """
